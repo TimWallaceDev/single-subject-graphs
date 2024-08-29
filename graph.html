@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Reader</title>
+</head>
+<body>
+  <input type="file" id="csvFileInput" accept=".csv">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="app.js"></script>
+</body>
+<script>
+    document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const contents = e.target.result;
+      parseCSV(contents);
+    };
+    reader.readAsText(file);
+  }
+}
+
+function parseCSV(contents) {
+  Papa.parse(contents, {
+    header: true,
+    dynamicTyping: true,
+    complete: function(results) {
+      const data = results.data;
+      console.log({data});
+      iterateData(data);
+    }
+  });
+}
+
+function iterateData(data) {
+  data.forEach((row, index) => {
+    console.log(`Row ${index + 1}:`);
+    for (const key in row) {
+      if (row.hasOwnProperty(key)) {
+        console.log(`  ${key}: ${row[key]}`);
+      }
+    }
+  });
+}
+
+</script>
+</html>
