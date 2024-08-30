@@ -1,16 +1,17 @@
 import Plot from 'react-plotly.js';
-import { DataPoint } from '../interface';
+import { DataPoint } from '../../interface';
+import "./ReversalGraph.scss"
 
 interface GraphProps {
     csvData: DataPoint[],
     title: string,
     fields: string[]
 }
-export const Reversal = (props: GraphProps) => {
+export const ReversalGraph = (props: GraphProps) => {
     const { csvData, title, fields } = props;
     const conditionName = fields[2];
 
-    console.log({ csvData });
+    // console.log({ csvData });
 
     const separatedData = [];
     const conditions = [csvData[0].condition];
@@ -22,10 +23,13 @@ export const Reversal = (props: GraphProps) => {
     for (let i = 0; i < csvData.length; i++) {
         const tmpDataPoint = csvData[i];
         tmpDataPoint.order = i + 1;
+        // console.log(tmpDataPoint[conditionName])
         if (tmpDataPoint[conditionName] > maxHeight) {
             maxHeight = tmpDataPoint[conditionName];
         }
+        // console.log(tmpDataPoint.condition)
         if (tmpDataPoint.condition !== tmpCondition) {
+            // console.log("new condition found")
             separatedData.push(tmpData);
             tmpData = [tmpDataPoint];
             tmpCondition = tmpDataPoint.condition;
@@ -36,6 +40,8 @@ export const Reversal = (props: GraphProps) => {
     }
 
     separatedData.push(tmpData);
+
+    // console.log({separatedData})
 
     const objects = [];
     const lines = [];
@@ -92,7 +98,7 @@ export const Reversal = (props: GraphProps) => {
         totalItem += tmpArray.length;
     }
 
-    console.log({ lines });
+    // console.log({ lines });
 
     function generateTicks(length: number){
         const ticks = []

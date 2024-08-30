@@ -1,0 +1,37 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 32px 0;
+    gap: 128px;
+
+    &__img {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+.hero {
+    display: flex;
+    margin: 32px 128px;
+    // min-height: 100vh;
+    align-items: center;
+
+    &__left {
+        flex: 1;
+        padding: 32px;
+        background-color: gray;
+        color: white;
+    }
+
+    &__right {
+        flex: 1;
+        gap: 64px;
+        padding: 32px;
+    }
+
+    &__img {
+        width: 100%;
+        max-width: 500px;
+    }
+}

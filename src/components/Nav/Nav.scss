@@ -1,0 +1,23 @@
+
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 64px;
+
+    &__title {
+        color: white;
+        margin: 0;
+    }
+
+    &__items {
+        display: flex;
+        list-style-type: none;
+        gap: 32px;
+    }
+
+    &__link {
+        color: white;
+    }
+}

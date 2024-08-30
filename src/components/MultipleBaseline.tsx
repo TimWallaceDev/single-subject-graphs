@@ -111,10 +111,12 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         }
         return {ticks, vals}
     }
+    console.log({objects})
 
     return (
         <Plot
             data={objects}
+            
             layout={{
                 title: title,
                 font: {

@@ -1,7 +1,9 @@
 
 import { MultipleBaselineGraph } from "../../components/MultipleBaseline";
+import { ReversalGraph } from "../../components/ReversalGraph/ReversalGraph";
 import Papa from "papaparse";
 import { useState } from "react";
+import "./Reversal.scss"
 
 
 export function Reversal() {
@@ -27,7 +29,7 @@ export function Reversal() {
             header: true,
             dynamicTyping: true,
             complete: function (results) {
-                console.log({results})
+                // console.log({results})
                 const data = results.data;
                 setData(data)
                 setFields(results.meta.fields)
@@ -38,8 +40,8 @@ export function Reversal() {
 
     if (!data) {
         return (
-            <>
-                <h1>Multiple Baseline Graph Generator</h1>
+            <main className="reversal">
+                <h1>Reversal Graph Generator</h1>
                 <h2>Instructions</h2>
                 <p>Export your data from a spreadsheet into a CSV. The structure should be as follows.</p>
                 <p>Sessions, Condition, Value</p>
@@ -48,14 +50,14 @@ export function Reversal() {
                     <h1>Add Data</h1>
                     <input type="file" id="csvFileInput" accept=".csv" name="file" onChange={(e) => handleFileSelect(e)} />
                 </form>
-            </>
+            </main>
         )
     }
 
     return (
-        <>
+        <main className="reversal">
             <h1>Heres the graph</h1>
-            <MultipleBaselineGraph csvData={data} title={title} fields={fields}/>
-        </>
+            <ReversalGraph csvData={data} title={title} fields={fields}/>
+        </main>
     )
 }
