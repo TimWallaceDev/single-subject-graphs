@@ -5,6 +5,8 @@ import Papa from "papaparse";
 
 export function MultipleBaseline() {
     const [data, setData] = useState(null)
+    const [title , setTitle] = useState("")
+    const [fields, setFields] = useState(null)
 
     function handleFileSelect(event) {
         event.preventDefault()
@@ -24,10 +26,16 @@ export function MultipleBaseline() {
             header: true,
             dynamicTyping: true,
             complete: function (results) {
+                console.log({results})
                 const data = results.data;
                 setData(data)
+                setFields(results.meta.fields)
             }
         });
+    }
+
+    function handleTitleChange(e){
+        setTitle(e.target.value)
     }
 
     if (!data) {
@@ -40,6 +48,7 @@ export function MultipleBaseline() {
                 <p>Session name, condition name, value</p>
                 <form onSubmit={(e) => handleFileSelect(e)}>
                     <h1>Add Data</h1>
+                    <input type="text" placeholder="title" name="title" onChange={(e) => handleTitleChange(e)}></input>
                     <input type="file" id="csvFileInput" accept=".csv" name="file" onChange={(e) => handleFileSelect(e)} />
                     <button type="submit">chart</button>
                 </form>
@@ -53,7 +62,7 @@ export function MultipleBaseline() {
     return (
         <>
             <h1>Heres the graph</h1>
-            <MultipleBaselineGraph csvData={data} />
+            <MultipleBaselineGraph csvData={data} title={title} fields={fields}/>
         </>
     )
 }

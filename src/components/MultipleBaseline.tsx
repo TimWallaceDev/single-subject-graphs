@@ -2,96 +2,138 @@ import Plot from 'react-plotly.js';
 import { DataPoint } from '../interface';
 
 interface GraphProps {
-    csvData: DataPoint[]
+    csvData: DataPoint[],
+    title: string,
+    fields: string[]
 }
 
 export const MultipleBaselineGraph = (props: GraphProps) => {
-    const { csvData } = props
-    console.log({csvData})
-    // const colors: string[] = ["red", "blue"]
-    // Separate data based on condition
-    const separatedData = []
-    const conditions = [csvData[0].condition]
-    let tmpCondition: string = csvData[0].condition
-    let tmpData: DataPoint[] = []
-    let maxHeight: number = 0
+    const { csvData, title, fields } = props;
+    const conditionName = fields[2];
 
-    //go through every datapoint
+    console.log({ csvData });
+
+    const separatedData = [];
+    const conditions = [csvData[0].condition];
+    let tmpCondition: string = csvData[0].condition;
+    let tmpData: DataPoint[] = [];
+    let maxHeight: number = 0;
+
+    // Process data
     for (let i = 0; i < csvData.length; i++) {
-        //if the datapoint condition does not match the previous condition, 
-        const tmpDataPoint = csvData[i]
-        tmpDataPoint.order = i + 1
-        if (tmpDataPoint.value > maxHeight) {
-            maxHeight = tmpDataPoint.value
+        const tmpDataPoint = csvData[i];
+        tmpDataPoint.order = i + 1;
+        if (tmpDataPoint[conditionName] > maxHeight) {
+            maxHeight = tmpDataPoint[conditionName];
         }
         if (tmpDataPoint.condition !== tmpCondition) {
-            // add the tmp array to data array and start new. 
-            separatedData.push(tmpData)
-            tmpData = [tmpDataPoint]
-            tmpCondition = tmpDataPoint.condition
-            conditions.push(tmpDataPoint.condition)
-        }
-        else {
-            tmpData.push(tmpDataPoint)
+            separatedData.push(tmpData);
+            tmpData = [tmpDataPoint];
+            tmpCondition = tmpDataPoint.condition;
+            conditions.push(tmpDataPoint.condition);
+        } else {
+            tmpData.push(tmpDataPoint);
         }
     }
 
-    separatedData.push(tmpData)
+    separatedData.push(tmpData);
 
-    console.log({ separatedData })
-
-    //create an object for each of the items in the data array. 
-    const objects = []
-    const lines = []
-    let totalItem = 1
+    const objects = [];
+    const lines = [];
+    const annotations = []
+    let totalItem = 1;
 
     for (let i = 0; i < separatedData.length; i++) {
-        const tmpArray = separatedData[i]
-        const tmpTime = tmpArray.map(item => item.order)
-        const tmpValue = tmpArray.map(item => item.value)
-        
-        objects.push(
-            {
-                x: tmpTime,
-                y: tmpValue,
-                type: 'scatter',
-                mode: 'lines+markers',
-                name: separatedData[i][0].condition,
-                marker: { color: "black"},
-            }
-        )
-        if (objects.length > 1) {
+        const tmpArray = separatedData[i];
+        const tmpTime = tmpArray.map(item => item.order == 0 ? "" : item.order);
+        const tmpValue = tmpArray.map(item => item[conditionName]);
 
-            lines.push(
-                {
-                    type: 'line',
-                    x0: totalItem - 0.5,
-                    y0: 0,
-                    x1: totalItem - 0.5,
-                    y1: Math.max(maxHeight),
-                    line: {
-                        color: 'black',
-                        width: 1,
-                        dash: "dot"
-                    }
+        objects.push({
+            x: tmpTime,
+            y: tmpValue,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: separatedData[i][0].condition,
+            marker: { color: "black" },
+        });
+
+        if (objects.length > 1) {
+            lines.push({
+                type: 'line',
+                x0: totalItem - 0.5,
+                y0: 0,
+                x1: totalItem - 0.5,
+                y1: maxHeight, // Use the calculated max height
+                line: {
+                    color: 'black',
+                    width: 2,
+                    dash: 'dot', // Line style
                 },
-            )
+            });
         }
-        totalItem += tmpArray.length
+
+        const centerX = (totalItem + totalItem + tmpArray.length - 1) / 2;
+
+        annotations.push({
+            x: centerX,
+            y: maxHeight,
+            xref: 'x',
+            yref: 'y',
+            text: separatedData[i][0].condition,  // The title text
+            showarrow: false,
+            font: {
+                size: 12,
+                color: 'black'
+            },
+            xanchor: 'center',
+            yanchor: 'bottom',
+            align: 'center'
+        });
+
+        totalItem += tmpArray.length;
     }
 
-    console.log({ objects })
+    console.log({ lines });
+
+    function generateTicks(length: number){
+        const ticks = []
+        const vals = []
+        for (let i = 0; i < length + 1; i++){
+            if (i === 0){
+                ticks.push("")
+            }
+            else {
+                ticks.push(i)
+            }
+
+            vals.push(i)
+
+        }
+        return {ticks, vals}
+    }
 
     return (
         <Plot
             data={objects}
             layout={{
-                title: 'Single Subject Design Graph',
-                yaxis: { title: 'Number Of Job Applications' },
-                xaxis: { title: 'Session' },
-                shapes: lines
-            }}
+                title: title,
+                font: {
+                    family: 'Times new Roman, serif', // Font family for the title
+                    size: 12, // Font size for the title
+                    color: '#000' // Font color for the title
+                },
+                yaxis: { title: conditionName, showgrid: false },
+                xaxis: {
+                    title: 'Sessions',
+                    showgrid: false,
+                    tickvals: generateTicks(csvData.length).vals, // Custom tick values
+                    ticktext: generateTicks(csvData.length).ticks // Custom tick text
+                },
+                shapes: lines, // Add lines to the layout
+                showlegend: false, // Optionally show legend
+                annotations: annotations
+            }
+            }
         />
     );
 };
-
