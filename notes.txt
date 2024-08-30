@@ -1,2 +1,21 @@
 multiple baseline graph
 reversal design graph or abab
+
+Instructions
+
+1. Enter your data in a spreadsheet. Make sure to use the following format: 
+    -first heading should be "session"
+    -second heading should be "condition". THIS IS IMPORTANT 
+    -Third heading should describe the value. This will be used as the label on the Y-axis. 
+
+    Then add all the data to the sheet. Each entry should have the session name, condition, and value. 
+
+2. Export your spreadsheet as a CSV file. 
+
+In google sheets go to file > Download > Comma Separated Values (.csv)
+
+3. Upload the CSV file to this website
+
+4. View your graph
+
+5. Add a title / save your graph

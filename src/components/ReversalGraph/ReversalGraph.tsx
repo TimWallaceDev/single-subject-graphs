@@ -1,30 +1,29 @@
 import Plot from 'react-plotly.js';
 import { DataPoint } from '../../interface';
 import "./ReversalGraph.scss"
+import { Annotations, Data, Shape } from 'plotly.js';
 
 interface GraphProps {
     csvData: DataPoint[],
-    title: string,
     fields: string[]
 }
 export const ReversalGraph = (props: GraphProps) => {
-    const { csvData, title, fields } = props;
+    const { csvData, fields } = props;
     const conditionName = fields[2];
-
-    // console.log({ csvData });
-
+    console.log({csvData})
     const separatedData = [];
     const conditions = [csvData[0].condition];
     let tmpCondition: string = csvData[0].condition;
     let tmpData: DataPoint[] = [];
     let maxHeight: number = 0;
 
+
     // Process data
     for (let i = 0; i < csvData.length; i++) {
-        const tmpDataPoint = csvData[i];
+        const tmpDataPoint= csvData[i];
         tmpDataPoint.order = i + 1;
         // console.log(tmpDataPoint[conditionName])
-        if (tmpDataPoint[conditionName] > maxHeight) {
+        if (typeof tmpDataPoint[conditionName] === 'number' && tmpDataPoint[conditionName] > maxHeight) {
             maxHeight = tmpDataPoint[conditionName];
         }
         // console.log(tmpDataPoint.condition)
@@ -50,8 +49,8 @@ export const ReversalGraph = (props: GraphProps) => {
 
     for (let i = 0; i < separatedData.length; i++) {
         const tmpArray = separatedData[i];
-        const tmpTime = tmpArray.map(item => item.order == 0 ? "" : item.order);
-        const tmpValue = tmpArray.map(item => item[conditionName]);
+        const tmpTime = tmpArray.map(item => item.order == 0 ? "" : item.order.toString());
+        const tmpValue = tmpArray.map(item => item[conditionName].toString());
 
         objects.push({
             x: tmpTime,
@@ -108,7 +107,7 @@ export const ReversalGraph = (props: GraphProps) => {
                 ticks.push("")
             }
             else {
-                ticks.push(i)
+                ticks.push(i.toString())
             }
 
             vals.push(i)
@@ -117,11 +116,13 @@ export const ReversalGraph = (props: GraphProps) => {
         return {ticks, vals}
     }
 
+    console.log({objects})
+
     return (
         <Plot
-            data={objects}
+            data={objects as Data[]}
             layout={{
-                title: title,
+                title: "title",
                 font: {
                     family: 'Times new Roman, serif', // Font family for the title
                     size: 12, // Font size for the title
@@ -134,9 +135,9 @@ export const ReversalGraph = (props: GraphProps) => {
                     tickvals: generateTicks(csvData.length).vals, // Custom tick values
                     ticktext: generateTicks(csvData.length).ticks // Custom tick text
                 },
-                shapes: lines, // Add lines to the layout
+                shapes: lines as Shape[], // Add lines to the layout
                 showlegend: false, // Optionally show legend
-                annotations: annotations
+                annotations: annotations as Annotations[]
             }
             }
         />
