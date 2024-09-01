@@ -1,5 +1,5 @@
 import reversalBaseline from "../../assets/reversal.png"
-import multipleBaseline from "../../assets/multipleBaseline.png"
+import multipleBaseline from "../../assets/multiple-baseline.png"
 import { Link } from "react-router-dom"
 import "./Home.scss"
 
