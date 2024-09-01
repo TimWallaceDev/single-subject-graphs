@@ -7,6 +7,7 @@ interface GraphProps {
     csvData: DataPoint[],
     fields: string[]
 }
+
 export const ReversalGraph = (props: GraphProps) => {
     const { csvData, fields } = props;
     const conditionName = fields[2];
@@ -16,7 +17,6 @@ export const ReversalGraph = (props: GraphProps) => {
     let tmpCondition: string = csvData[0].condition;
     let tmpData: DataPoint[] = [];
     let maxHeight: number = 0;
-
 
     // Process data
     for (let i = 0; i < csvData.length; i++) {
@@ -39,8 +39,6 @@ export const ReversalGraph = (props: GraphProps) => {
     }
 
     separatedData.push(tmpData);
-
-    // console.log({separatedData})
 
     const objects = [];
     const lines = [];
@@ -97,7 +95,6 @@ export const ReversalGraph = (props: GraphProps) => {
         totalItem += tmpArray.length;
     }
 
-    // console.log({ lines });
 
     function generateTicks(length: number){
         const ticks = []

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MultipleBaselineGraph } from "../../components/MultipleBaseline";
+import { MultipleBaselineGraph } from "../../components/MultipleBaseline/MultipleBaseline";
 import Papa from "papaparse";
 
 
@@ -7,6 +7,8 @@ export function MultipleBaseline() {
     const [data, setData] = useState(null)
     const [title , setTitle] = useState("")
     const [fields, setFields] = useState(null)
+
+    console.log({fields})
 
     function handleFileSelect(event) {
         event.preventDefault()
@@ -26,16 +28,13 @@ export function MultipleBaseline() {
             header: true,
             dynamicTyping: true,
             complete: function (results) {
-                console.log({results})
+                // console.log({results})
                 const data = results.data;
                 setData(data)
+                // console.log({data})
                 setFields(results.meta.fields)
             }
         });
-    }
-
-    function handleTitleChange(e){
-        setTitle(e.target.value)
     }
 
     if (!data) {
@@ -46,11 +45,9 @@ export function MultipleBaseline() {
                 <p>Export your data from a spreadsheet into a CSV. The structure should be as follows.</p>
                 <p>Sessions, Condition, Value</p>
                 <p>Session name, condition name, value</p>
-                <form onSubmit={(e) => handleFileSelect(e)}>
+                <form>
                     <h1>Add Data</h1>
-                    <input type="text" placeholder="title" name="title" onChange={(e) => handleTitleChange(e)}></input>
                     <input type="file" id="csvFileInput" accept=".csv" name="file" onChange={(e) => handleFileSelect(e)} />
-                    <button type="submit">chart</button>
                 </form>
             </>
         )
