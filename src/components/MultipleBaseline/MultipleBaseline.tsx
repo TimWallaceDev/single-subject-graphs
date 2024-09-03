@@ -1,236 +1,38 @@
 import Plot from 'react-plotly.js';
 import { DataPoint } from '../../interface';
+import { CSVToColumns } from '../../functions/CSVToColumns';
+import { ColumnsToPlotObjects } from '../../functions/ColumnsToPlotObjects';
+import { MaxHeightOfGraph } from '../../functions/MaxHeightOfGraph';
+import { CreateLines } from '../../functions/CreateLines';
+import { CalculateDomains } from '../../functions/CalculateDomains';
+import { Layout } from 'plotly.js';
 
 interface GraphProps {
     csvData: DataPoint[],
-    title: string,
     fields: string[]
 }
-interface LineSegment {
-    "x": string[],
-    "y": string[],
-    "type": "scatter",
-    "mode": "lines+markers",
-    "name": "Baseline",
-    "marker": { "color": "black" },
-    "xaxis": string,
-    "yaxis": string
-}
-//start with csv data DONE
-//separate data into different columns DONE
-//separate columns into baseline / intervention
-//
 
 export const MultipleBaselineGraph = (props: GraphProps) => {
-    const { csvData, title, fields } = props;
+    const { csvData, fields } = props;
 
-    const columns: string[][] = []
-    const setNames = fields.filter(field => field !== "session")
+    console.log({ fields })
 
-    //loop over every data point
-    for (let i = 0; i < csvData.length; i++) {
-        //loop over every set in the datapoint
-        const point = csvData[i]
-        for (let j = 0; j < setNames.length; j++) {
-            const dataValue = point[setNames[j]]
-            if (!columns[j]) {
-                columns[j] = []
-            }
-            columns[j].push(dataValue)
-        }
-    }
-    //we have an array of arrays for each set. Each set is an array of datapoints
+    //separate data into columns
+    const columns = CSVToColumns(csvData, fields)
 
-    //turn columns into objects. 
-    const data = []
-
-    //go over each column
-    for (let i = 0; i < columns.length; i++) {
-        const column = columns[i]
-        const lastDataPoint = column[0]
-        let condition = lastDataPoint.split("-")[0]
-        const tmpData: LineSegment = {
-            "x": [],
-            "y": [],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Baseline",
-            "marker": { "color": "black" },
-            "xaxis": "x1",
-            "yaxis": "y1",
-        }
-        //go over each datapoint in the column
-        for (let j = 0; j < column.length; j++) {
-            //set the count of the x and y axis
-            tmpData["xaxis"] = "x" + (i + 1).toString()
-            tmpData["yaxis"] = "y" + (i + 1).toString()
-            //get the condition for this 'half' of datapoints
-            const currentDataPoint = column[j]
-            const currentCondition = currentDataPoint.split("-")[0]
-            const currentValue = currentDataPoint.split("-")[1]
-            //check for new condition. if we find one, we will push the current object to data, and reset the tmpData
-            if (condition !== currentCondition) {
-                //push the first half of the column data
-                data.push({ ...tmpData })
-                //reset the tmpData
-                tmpData["x"] = []
-                tmpData["y"] = []
-                //set the new condition
-                condition = currentCondition
-            }
-
-            //add the data to tmpData
-            tmpData["x"].push((j + 1).toString())
-            tmpData["y"].push(currentValue)
-        }
-        //push the second half of the column data
-        data.push({ ...tmpData })
-    }
-
-
-
-    const double = [
-        {
-            "x": ["1", "2", "3"],
-            "y": ["0", "3", "1"],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Baseline",
-            "marker": { "color": "black" },
-            "xaxis": "x1",
-            "yaxis": "y1"
-        },
-        {
-            "x": ["4", "5", "6", "7", "8", "9", "10"],
-            "y": ["6", "7", "9", "7", "8", "7", "8"],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Intervention",
-            "marker": { "color": "black" },
-            "xaxis": "x1",
-            "yaxis": "y1"
-        },
-        {
-            "x": ["1", "2", "3", "4", "5", "6"],
-            "y": ["2", "4", "2", "3", "2", "3"],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Comparison",
-            "marker": { "color": "black" },
-            "xaxis": "x2",
-            "yaxis": "y2"
-        },
-        {
-            "x": ["7", "8", "9", "10"],
-            "y": ["6", "7", "6", "7"],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Post-Intervention",
-            "marker": { "color": "black" },
-            "xaxis": "x2",
-            "yaxis": "y2",
-        },
-        {
-            "x": ["1", "2", "3", "4", "5", "6", "7", "8"],
-            "y": ["2", "4", "2", "3", "2", "3", "3", "2"],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Comparison",
-            "marker": { "color": "black" },
-            "xaxis": "x3",
-            "yaxis": "y3"
-        },
-        {
-            "x": ["9", "10"],
-            "y": ["6", "7"],
-            "type": "scatter",
-            "mode": "lines+markers",
-            "name": "Post-Intervention",
-            "marker": { "color": "black" },
-            "xaxis": "x3",
-            "yaxis": "y3",
-        },
-    ]
+    //create Plot objects from columns
+    const data = ColumnsToPlotObjects(columns)
 
     //get the max height for all graphs
-    let maxHeight = 0
-    for (const column of columns) {
-        for (const dataPoint of column) {
-            const height = parseInt(dataPoint.split("-")[1])
-            if (height > maxHeight) {
-                maxHeight = height
-            }
+    const maxHeight = MaxHeightOfGraph(columns)
 
-        }
-    }
-
-    //go over each column
-    //go over each datapoint in the column
-    //find the point where the condition changes. 
-    const lines = []
-    let lastXPos = 0
-    for (let i = 0; i < columns.length; i++) {
-        const column = columns[i]
-        const lastDataPoint = column[0]
-        const condition = lastDataPoint.split("-")[0]
-        let lineXPos = 0
-        for (let j = 0; j < column.length; j++) {
-            const currentDataPoint = column[j]
-            const currentCondition = currentDataPoint.split("-")[0]
-            //check for new condition. This will be where a line is added. 
-            if (condition !== currentCondition) {
-                lineXPos = j
-                break;
-            }
-        }
-        //create a new line object
-        //the max height will be the height of the line
-        //the lineXPos will be the x position of the line. 
-        const xref = "x" + (i + 1).toString()
-        const yref = "y" + (i + 1).toString()
-        console.log(xref, yref)
-        const newLine = {
-            type: 'line',
-            x0: lineXPos + 0.5,
-            y0: 0,
-            x1: lineXPos + 0.5,
-            y1: maxHeight + 20, // Use the calculated max height
-            line: {
-                color: 'black',
-                width: 2,
-                dash: 'dot', // Line style
-            },
-            xref: xref,
-            yref: yref
-        }
-        const newHorizontalLine = {
-            type: 'line',
-            x0: lastXPos + 0.5,
-            y0: maxHeight + 2,
-            x1: lineXPos + 0.5,
-            y1: maxHeight + 2, // Use the calculated max height
-            line: {
-                color: 'black',
-                width: 2,
-                dash: 'dot', // Line style
-            },
-            xref: xref,
-            yref: yref
-        }
-        lines.push({ ...newLine });
-        if (i > 0) {
-            lines.push({ ...newHorizontalLine })
-        }
-        console.log({ newLine })
-        lastXPos = lineXPos
-    }
-
-    console.log({ lines })
+    //add lines
+    const lines = CreateLines(columns, maxHeight)
 
     function generateTicks(length: number) {
         const ticks = []
         const vals = []
-        for (let i = 0; i < length + 1; i++) {
+        for (let i = 1; i < length + 1; i++) {
             if (i === 0) {
                 ticks.push("")
             }
@@ -243,102 +45,161 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         }
         return { ticks, vals }
     }
+
+    const firstLineX = lines[0].x0
+    console.log({ lines })
+
+    const annotations = []
     //add baseline / treatment annotations
+    annotations.push(
+        {
+            text: "baseline",
+            xref: "paper",
+            yref: "paper",
+            x: firstLineX / 2,
+            y: 1,
+            showarrow: false,
+
+        },
+        {
+            text: "treatment",
+            xref: "paper",
+            yref: "paper",
+            x: firstLineX + firstLineX / 2,
+            y: 1,
+            showarrow: false,
+
+        },
+    )
 
     //add axis titles
+    annotations.push(
+        {
+            text: "Vertical Annotation",  // The text you want to display
+            xref: "paper",                // Use 'paper' to refer to the full plotting area
+            yref: "paper",
+            x: -0.07,                         // Position at the left side (x = 0)
+            y: 0.5,                       // Centered vertically (y = 0.5)
+            xanchor: 'right',             // Align text to the right (so it doesn't overlap)
+            yanchor: 'middle',            // Center vertically
+            showarrow: false,             // No arrow pointing to the text
+            textangle: -90,          // Rotate text 90 degrees counterclockwise
+            font: { size: 12 }
+        }
+    )
+
 
     //add set annotations
+    for (let i = 0; i < 3; i++){
+        const annotation = {
+            text: "set " + (i + 1),
+            xref: "x" + (i + 1),
+            yref: "y" + (i + 1),
+            x: 20,
+            y: 1,
+            showarrow: false,
+        }
+        annotations.push({...annotation})
+    }
+
+    //add title
 
     //calculate domains for each graph
+    const domains = CalculateDomains(3)
 
-    //add lines
+
+    //generate layout
+
+    const layout = {
+        title: "Title",
+        annotations: annotations,
+        margin: { l: 75, r: 75, t: 100, b: 100 },
+        font: {
+            family: 'Times New Roman, serif',
+            size: 12,
+            color: '#000'
+        },
+        grid: { rows: data.length / 2, columns: 1, pattern: 'independent' }, // Define a grid for stacking
+        yaxis: {
+            title: "",
+            showgrid: false,
+            domain: domains[0],
+            anchor: 'y1',
+            showline: true,
+            zeroline: true,
+            linewidth: 1,
+            range: [0, maxHeight + 2],  // Fixing the range
+            ticklen: 4,
+            tickwidth: 1
+        },
+        xaxis: {
+            title: '',
+            showgrid: false,
+            tickvals: generateTicks(csvData.length).vals,
+            ticktext: generateTicks(csvData.length).ticks,
+            anchor: 'x1',
+            ticklen: 4,
+            tickwidth: 1,
+            range: [0, 21]
+            // linewidth: 1
+        },
+        yaxis2: {
+            title: '',
+            showgrid: false,
+            domain: domains[1],
+            anchor: 'y2',
+            showline: true,
+            range: [0, maxHeight + 2],  // Fixing the range
+            ticklen: 4,
+            tickwidth: 1
+            // linewidth: 1
+        },
+        xaxis2: {
+            // title: 'Sessions',
+            showgrid: false,
+            tickvals: generateTicks(csvData.length).vals,
+            ticktext: generateTicks(csvData.length).ticks,
+            anchor: 'x2',
+            showline: true,
+            ticklen: 4,
+            tickwidth: 1,
+            range: [0, 21]
+            // linewidth: 1,
+        },
+        yaxis3: {
+            title: '',
+            showgrid: false,
+            domain: domains[2],
+            anchor: 'y3',
+            showline: true,
+            range: [0, maxHeight + 2],  // Fixing the range
+            ticklen: 4,
+            tickwidth: 1
+            // linewidth: 1
+        },
+        xaxis3: {
+            title: 'Sessions',
+            showgrid: false,
+            tickvals: generateTicks(csvData.length).vals,
+            ticktext: generateTicks(csvData.length).ticks,
+            anchor: 'x3',
+            showline: true,
+            ticklen: 2,
+            tickwidth: 1,
+            range: [0, 21]
+            // linewidth: 1,
+        },
+
+        shapes: lines,
+        showlegend: false,
+        height: data.length * 150
+    }
 
 
     return (
         <Plot
             data={data}
-            layout={{
-                title: title,
-                font: {
-                    family: 'Times New Roman, serif',
-                    size: 12,
-                    color: '#000'
-                },
-                grid: { rows: data.length / 2, columns: 1, pattern: 'independent' }, // Define a 2-row grid for stacking
-                yaxis: {
-                    // title: conditionName,
-                    showgrid: false,
-                    domain: [0.75, 1],
-                    anchor: 'y1',
-                    showline: true,
-                    zeroline: true,
-                    linewidth: 1,
-                    range: [0, maxHeight + 2],  // Fixing the range
-                    ticklen: 4,
-                    tickwidth: 1
-                },  // First subplot y-axis
-                xaxis: {
-                    // title: 'Sessions',
-                    showgrid: false,
-                    tickvals: generateTicks(csvData.length).vals,
-                    ticktext: generateTicks(csvData.length).ticks,
-                    anchor: 'x1',
-                    ticklen: 4,
-                    tickwidth: 1,
-                    range: [0, 21]
-                    // linewidth: 1
-                },
-                yaxis2: {
-                    // title: 'Comparison',
-                    showgrid: false,
-                    domain: [0.45, 0.70],
-                    anchor: 'y2',
-                    showline: true,
-                    range: [0, maxHeight + 2],  // Fixing the range
-                    ticklen: 4,
-                    tickwidth: 1
-                    // linewidth: 1
-                }, // Second subplot y-axis
-                xaxis2: {
-                    // title: 'Sessions',
-                    showgrid: false,
-                    tickvals: generateTicks(csvData.length).vals,
-                    ticktext: generateTicks(csvData.length).ticks,
-                    anchor: 'x2',
-                    showline: true,
-                    ticklen: 4,
-                    tickwidth: 1,
-                    range: [0, 21]
-                    // linewidth: 1,
-                },
-                yaxis3: {
-                    // title: 'Comparison',
-                    showgrid: false,
-                    domain: [0.15, 0.4],
-                    anchor: 'y3',
-                    showline: true,
-                    range: [0, maxHeight + 2],  // Fixing the range
-                    ticklen: 4,
-                    tickwidth: 1
-                    // linewidth: 1
-                }, // Second subplot y-axis
-                xaxis3: {
-                    // title: 'Sessions',
-                    showgrid: false,
-                    tickvals: generateTicks(csvData.length).vals,
-                    ticktext: generateTicks(csvData.length).ticks,
-                    anchor: 'x3',
-                    showline: true,
-                    ticklen: 2,
-                    tickwidth: 1,
-                    range: [0, 21]
-                    // linewidth: 1,
-                },
-
-                shapes: lines,
-                showlegend: false,
-                height: data.length * 150
-            }}
+            layout={layout as Partial<Layout>}
         />
     );
 };

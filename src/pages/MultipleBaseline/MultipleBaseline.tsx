@@ -5,7 +5,6 @@ import Papa from "papaparse";
 
 export function MultipleBaseline() {
     const [data, setData] = useState(null)
-    const [title , setTitle] = useState("")
     const [fields, setFields] = useState(null)
 
     console.log({fields})
@@ -28,10 +27,8 @@ export function MultipleBaseline() {
             header: true,
             dynamicTyping: true,
             complete: function (results) {
-                // console.log({results})
                 const data = results.data;
                 setData(data)
-                // console.log({data})
                 setFields(results.meta.fields)
             }
         });
@@ -52,14 +49,11 @@ export function MultipleBaseline() {
             </>
         )
     }
-    else {
-        console.log("data exists", { data })
-    }
 
     return (
         <>
             <h1>Heres the graph</h1>
-            <MultipleBaselineGraph csvData={data} title={title} fields={fields}/>
+            <MultipleBaselineGraph csvData={data} fields={fields}/>
         </>
     )
 }
