@@ -11,7 +11,7 @@ interface GraphProps {
 export const ReversalGraph = (props: GraphProps) => {
     const { csvData, fields } = props;
     const conditionName = fields[2];
-    console.log({csvData})
+    // console.log({csvData})
     const separatedData = [];
     const conditions = [csvData[0].condition];
     let tmpCondition: string = csvData[0].condition;
@@ -20,15 +20,13 @@ export const ReversalGraph = (props: GraphProps) => {
 
     // Process data
     for (let i = 0; i < csvData.length; i++) {
-        const tmpDataPoint= csvData[i];
+        const tmpDataPoint = csvData[i];
         tmpDataPoint.order = i + 1;
-        // console.log(tmpDataPoint[conditionName])
         if (typeof tmpDataPoint[conditionName] === 'number' && tmpDataPoint[conditionName] > maxHeight) {
             maxHeight = tmpDataPoint[conditionName];
         }
         // console.log(tmpDataPoint.condition)
         if (tmpDataPoint.condition !== tmpCondition) {
-            // console.log("new condition found")
             separatedData.push(tmpData);
             tmpData = [tmpDataPoint];
             tmpCondition = tmpDataPoint.condition;
@@ -78,7 +76,7 @@ export const ReversalGraph = (props: GraphProps) => {
 
         annotations.push({
             x: centerX,
-            y: maxHeight,
+            y: maxHeight + 1,
             xref: 'x',
             yref: 'y',
             text: separatedData[i][0].condition,  // The title text
@@ -96,24 +94,29 @@ export const ReversalGraph = (props: GraphProps) => {
     }
 
 
-    function generateTicks(length: number){
+    function generateTicks(csvData: DataPoint[]) {
+        const sessionLabel = fields[0]
         const ticks = []
         const vals = []
-        for (let i = 0; i < length + 1; i++){
-            if (i === 0){
-                ticks.push("")
-            }
-            else {
-                ticks.push(i.toString())
-            }
+        for (let i = 0; i < csvData.length; i++) {
 
-            vals.push(i)
+            //create label
+            const currentObject = csvData[i]
+            console.log({ currentObject })
+            const tick = currentObject[sessionLabel].toString()
+            console.log(tick)
+            ticks.push(tick)
+
+            //create value
+            vals.push(i + 1)
 
         }
-        return {ticks, vals}
+        return { ticks, vals }
     }
 
-    console.log({objects})
+    console.log({ objects })
+
+    console.log()
 
     return (
         <Plot
@@ -125,16 +128,31 @@ export const ReversalGraph = (props: GraphProps) => {
                     size: 12, // Font size for the title
                     color: '#000' // Font color for the title
                 },
-                yaxis: { title: conditionName, showgrid: false },
+                yaxis: {
+                    title: conditionName,
+                    showgrid: false,
+                    range: [0, maxHeight + 1],
+                    ticklen: 4,
+                    tickwidth: 1
+                },
                 xaxis: {
                     title: 'Sessions',
                     showgrid: false,
-                    tickvals: generateTicks(csvData.length).vals, // Custom tick values
-                    ticktext: generateTicks(csvData.length).ticks // Custom tick text
+                    tickvals: generateTicks(csvData).vals, // Custom tick values
+                    ticktext: generateTicks(csvData).ticks, // Custom tick text
+                    range: [0, csvData.length + 1],
+                    ticklen: 4,
+                    tickwidth: 1
                 },
                 shapes: lines as Shape[], // Add lines to the layout
                 showlegend: false, // Optionally show legend
-                annotations: annotations as Annotations[]
+                annotations: annotations as Annotations[],
+                margin: {
+                    l: 75,  // Left margin
+                    r: 75,  // Right margin
+                    t: 100,  // Top margin
+                    b: 100   // Bottom margin
+                }
             }
             }
         />

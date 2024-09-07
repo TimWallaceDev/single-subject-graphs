@@ -29,25 +29,30 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
     //add lines
     const lines = CreateLines(columns, maxHeight)
 
-    function generateTicks(length: number) {
-        const ticks = []
+    function generateTicks(length: number, blank: boolean) {
+        const text = []
         const vals = []
         for (let i = 1; i < length + 1; i++) {
             if (i === 0) {
-                ticks.push("")
+                text.push("")
+            }
+            else if (blank) {
+                console.log("blank")
+                text.push("")
             }
             else {
-                ticks.push(i)
+                console.log("value")
+                text.push(i)
             }
 
             vals.push(i)
 
         }
-        return { ticks, vals }
+        console.log({text})
+        return { text: [...text], vals: [...vals] }
     }
 
     const firstLineX = lines[0].x0
-    console.log({ lines })
 
     const annotations = []
     //add baseline / treatment annotations
@@ -88,9 +93,8 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         }
     )
 
-
     //add set annotations
-    for (let i = 0; i < 3; i++){
+    for (let i = 0; i < data.length / 2; i++) {
         const annotation = {
             text: "set " + (i + 1),
             xref: "x" + (i + 1),
@@ -99,102 +103,86 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
             y: 1,
             showarrow: false,
         }
-        annotations.push({...annotation})
+        annotations.push({ ...annotation })
     }
 
     //add title
 
     //calculate domains for each graph
-    const domains = CalculateDomains(3)
+    const domains = CalculateDomains(data.length / 2)
 
 
     //generate layout
-
     const layout = {
         title: "Title",
-        annotations: annotations,
-        margin: { l: 75, r: 75, t: 100, b: 100 },
+        annotations: annotations,   //graph annotations array
+        margin: { l: 75, r: 75, t: 100, b: 100 }, //margins
         font: {
             family: 'Times New Roman, serif',
             size: 12,
             color: '#000'
         },
         grid: { rows: data.length / 2, columns: 1, pattern: 'independent' }, // Define a grid for stacking
-        yaxis: {
-            title: "",
+        shapes: lines,
+        showlegend: false,
+        height: data.length * 150
+    }
+
+    //loop over all the data objects to create layout objects
+
+    for (let i = 1; i < data.length / 2 + 1; i++) {
+        //create the object key
+        let yaxis = "yaxis"
+        let xaxis = "xaxis"
+        const yAnchor = "y" + i
+        const xAnchor = "x" + i
+
+        const singleYAxis = {
             showgrid: false,
-            domain: domains[0],
-            anchor: 'y1',
+            domain: domains[i - 1],
+            anchor: yAnchor,
             showline: true,
             zeroline: true,
             linewidth: 1,
             range: [0, maxHeight + 2],  // Fixing the range
             ticklen: 4,
             tickwidth: 1
-        },
-        xaxis: {
-            title: '',
-            showgrid: false,
-            tickvals: generateTicks(csvData.length).vals,
-            ticktext: generateTicks(csvData.length).ticks,
-            anchor: 'x1',
-            ticklen: 4,
-            tickwidth: 1,
-            range: [0, 21]
-            // linewidth: 1
-        },
-        yaxis2: {
-            title: '',
-            showgrid: false,
-            domain: domains[1],
-            anchor: 'y2',
-            showline: true,
-            range: [0, maxHeight + 2],  // Fixing the range
-            ticklen: 4,
-            tickwidth: 1
-            // linewidth: 1
-        },
-        xaxis2: {
-            // title: 'Sessions',
-            showgrid: false,
-            tickvals: generateTicks(csvData.length).vals,
-            ticktext: generateTicks(csvData.length).ticks,
-            anchor: 'x2',
-            showline: true,
-            ticklen: 4,
-            tickwidth: 1,
-            range: [0, 21]
-            // linewidth: 1,
-        },
-        yaxis3: {
-            title: '',
-            showgrid: false,
-            domain: domains[2],
-            anchor: 'y3',
-            showline: true,
-            range: [0, maxHeight + 2],  // Fixing the range
-            ticklen: 4,
-            tickwidth: 1
-            // linewidth: 1
-        },
-        xaxis3: {
-            title: 'Sessions',
-            showgrid: false,
-            tickvals: generateTicks(csvData.length).vals,
-            ticktext: generateTicks(csvData.length).ticks,
-            anchor: 'x3',
-            showline: true,
-            ticklen: 2,
-            tickwidth: 1,
-            range: [0, 21]
-            // linewidth: 1,
-        },
+        }
 
-        shapes: lines,
-        showlegend: false,
-        height: data.length * 150
+        const singleXAxis = {
+            showgrid: false,
+            anchor: xAnchor,
+            ticklen: 4,
+            tickwidth: 1,
+            range: [0, csvData.length + 1]
+            // linewidth: 1
+        }
+
+        if (i == data.length / 2) {
+            singleXAxis["tickvals"] = generateTicks(csvData.length, false).vals
+            singleXAxis["ticktext"] = generateTicks(csvData.length, false).text
+            console.log("adding custom ticks")
+        }
+        else {
+            singleXAxis["tickvals"] = generateTicks(csvData.length, true).vals
+            singleXAxis["ticktext"] = generateTicks(csvData.length, true).text
+            console.log("adding blank ticks")
+        }
+
+
+        if (i > 1) {
+            yaxis += i
+            xaxis += i
+        }
+        console.log(yaxis, xaxis)
+
+        //add the single axis to the layout object
+        layout[xaxis] = { ...singleXAxis }
+        layout[yaxis] = { ...singleYAxis }
+
     }
 
+    console.log({ layout })
 
     return (
         <Plot

@@ -1,5 +1,22 @@
 export function CreateLines(columns: any, maxHeight: number) {
 
+    //calculate the percentage that the line should cover vertically
+    let percentage = 0
+    switch (columns.length) {
+        case 1:
+            percentage = 1
+            break;
+        case 2:
+            percentage = 0.55
+            break;
+        case 3:
+            percentage = 0.34
+            break;
+        case 4:
+            percentage = 0.25
+            break;
+    }
+
     //add lines to the graphs
     //find the point where the condition changes. 
     const lines = []
@@ -23,8 +40,8 @@ export function CreateLines(columns: any, maxHeight: number) {
         let xRelative = lineXPos / columns[0].length; // Convert to paper-relative value
         // const yRelativeStart = 0;
         // const yRelativeEnd = 1; // Full height of the paper
-        const yRelativeTop = 1 - (i * 0.34); // Adjust based on subplot height
-        let yRelativeBottom = 1 - ((i + 1) * 0.34); // Adjust based on subplot height
+        const yRelativeTop = 1 - (i * percentage); // Adjust based on subplot height
+        let yRelativeBottom = 1 - ((i + 1) * percentage); // Adjust based on subplot height
 
         // //this fixes the vertical lines horizontal position
         switch (i) {
@@ -34,11 +51,23 @@ export function CreateLines(columns: any, maxHeight: number) {
             case 2:
                 xRelative -= 0.01
                 break;
+            case 3:
+                xRelative -= 0.015
         }
 
         //remove the overhang of the vertical line from the bottom graph
-        if (i === columns.length -1){
-            yRelativeBottom += 0.04
+        if (i === columns.length - 1) {
+            switch (columns.length) {
+                case 2:
+                    yRelativeBottom += 0.1
+                    break;
+                case 3:
+                    yRelativeBottom += 0.04
+                    break;
+                case 4:
+                    yRelativeBottom += 0.03
+
+            }
         }
         //create a new line object
         //the max height will be the height of the line
