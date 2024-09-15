@@ -69,43 +69,46 @@ export function MultipleBaseline() {
 
     return (
         <main className="product">
-            <h1 className="product__title">Reversal Graph Generator</h1>
-            <h2 className="product__subtitle">Data Sheet Instructions</h2>
-            <section className="instructions">
+            <h1 className="product__title">Multiple Baseline Graph Generator</h1>
+            <section className="instructions-wrapper">
 
-                <ol className="instructions__list">
-                    <li className="instructions__item">
-                        <span>
-                            Add Headings in the first row of the the spreadsheet:
-                        </span>
-                        <ul>
-                            <li>
-                                first heading should be "session". This will be the label for the X-axis
-                            </li>
-                            <li>
-                                Add as many set titles as you have
-                            </li>
-                        </ul>
-                    </li>
-                    <li className="instructions__item">
-                        Then add all the data to the sheet. Each entry should have the session name, condition, and value. In the example below, you can replace "Baseline" and "Intervention" with something more descriptive. Make sure to add both the condition and value in the same box and separate the data using a dash.
-                    </li>
-                    <li className="instructions__item">
-                        Export your spreadsheet as a CSV file.
-                        <br />
+                <h2 className="product__subtitle">Data Sheet Instructions</h2>
+                <div className="instructions">
 
-                        In google sheets go to file - Download - Comma Separated Values (.csv)
-                    </li>
-                    <li className="instructions__item">
-                        Upload the CSV file to this website
-                    </li>
-                    <li className="instructions__item">
-                        View your graph and add a title
-                    </li>
-                </ol>
-                <div className="instructions__spreadsheet">
-                    <h3 className="instructions__spreadsheet-label">Example Spreadsheet</h3>
-                    <img src={spreadsheet} alt="spreadsheet example" className="instructions__image" />
+                    <ol className="instructions__list">
+                        <li className="instructions__item">
+                            <span>
+                                Add Headings in the first row of the the spreadsheet:
+                            </span>
+                            <ul>
+                                <li>
+                                    first heading should be "session". This will be the label for the X-axis
+                                </li>
+                                <li>
+                                    Add as many set titles as you have
+                                </li>
+                            </ul>
+                        </li>
+                        <li className="instructions__item">
+                            Then add all the data to the sheet. Each entry should have the session name, condition, and value. In the example below, you can replace "Baseline" and "Intervention" with something more descriptive. Make sure to add both the condition and value in the same box and separate the data using a dash.
+                        </li>
+                        <li className="instructions__item">
+                            Export your spreadsheet as a CSV file.
+                            <br />
+
+                            In google sheets go to file - Download - Comma Separated Values (.csv)
+                        </li>
+                        <li className="instructions__item">
+                            Upload the CSV file to this website
+                        </li>
+                        <li className="instructions__item">
+                            View your graph and add a title
+                        </li>
+                    </ol>
+                    <div className="instructions__spreadsheet">
+                        <h3 className="instructions__spreadsheet-label">Example Spreadsheet</h3>
+                        <img src={spreadsheet} alt="spreadsheet example" className="instructions__image" />
+                    </div>
                 </div>
             </section>
 

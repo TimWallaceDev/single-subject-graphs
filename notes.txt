@@ -2,5 +2,9 @@ TODO
 
 edit README
 
-deploy / server config
+styling
+-instructions styling
+-file input / graph spacing
+-mobile styling
+
 

@@ -13,6 +13,7 @@
         font-weight: normal;
     }
 }
+
 .product {
     display: flex;
     flex-direction: column;
@@ -29,14 +30,21 @@
         padding: 0 4rem;
     }
 
+    &__title {
+        margin: 3rem 0;
+    }
+
     &__subtitle {
         text-align: center;
         text-decoration: underline;
     }
 }
+
 .instructions-wrapper {
     background-color: $light-gray;
+    border-radius: 4px;
 }
+
 .instructions {
 
     width: 100%;
@@ -72,6 +80,7 @@
     &__spreadsheet {
 
 
+
         @include tablet {
             flex: 1;
             display: flex;
@@ -85,6 +94,9 @@
     }
 
     &__image {
+        
+        border-radius: 4px;
+
         @include tablet {
             max-width: 450px;
             width: 100%;
@@ -115,7 +127,7 @@
     &:hover {
         background: $blue-hover;
     }
-    
+
     &__label {
         font-size: 1.2rem;
         font-weight: 600;
@@ -124,7 +136,7 @@
         align-items: center;
         gap: 0.5rem;
     }
-    
+
 }
 
 #fileInput {
@@ -148,7 +160,7 @@
         width: 100%;
     }
 
-    &__title-input{
+    &__title-input {
         flex: 1;
     }
 

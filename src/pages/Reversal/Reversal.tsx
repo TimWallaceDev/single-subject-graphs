@@ -71,7 +71,7 @@ export function Reversal() {
             <h1 className="product__title">Reversal Graph Generator</h1>
             <section className="instructions-wrapper">
                 <h2 className="product__subtitle">Data Sheet Instructions</h2>
-
+        
                 <div className="instructions">
 
                     <ol className="instructions__list">
