@@ -7,7 +7,7 @@ import svg from "../../assets/graphsvg.svg"
 import download from "../../assets/icons/download.svg"
 import uploadFile from "../../assets/icons/upload_file.svg"
 import { DataPoint } from "../../interface";
-import Plotly from "plotly.js";
+import Plotly from "plotly.js-basic-dist";
 
 
 export function Reversal() {

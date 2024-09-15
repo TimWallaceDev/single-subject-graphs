@@ -1,7 +1,7 @@
 import Plot from 'react-plotly.js';
 import { DataPoint } from '../../interface';
 import "./ReversalGraph.scss"
-import { Annotations, Data, Shape } from 'plotly.js';
+import { Annotations, Data, Shape } from 'plotly.js-basic-dist';
 
 interface GraphProps {
     csvData: DataPoint[],
