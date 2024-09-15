@@ -99,10 +99,10 @@ export function MultipleBaseline() {
                             In google sheets go to file - Download - Comma Separated Values (.csv)
                         </li>
                         <li className="instructions__item">
-                            Upload the CSV file to this website
+                            Upload the CSV file below
                         </li>
                         <li className="instructions__item">
-                            View your graph and add a title
+                            View your graph and add a title and labels
                         </li>
                     </ol>
                     <div className="instructions__spreadsheet">

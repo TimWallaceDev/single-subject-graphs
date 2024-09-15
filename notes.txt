@@ -2,6 +2,14 @@ TODO
 
 edit README
 
+add contact page
+
+add reference
+
+homepage graph border
+
+remove desktop styling for upload spacing
+
 styling
 -instructions styling
 -file input / graph spacing

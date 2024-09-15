@@ -46,17 +46,29 @@
 .instructions-wrapper {
     background-color: $light-gray;
     border-radius: 4px;
+    padding: 1rem;
+
+    @include tablet {
+        padding: 2rem 3rem;
+    }
+
+    @include desktop {
+        padding: 2rem 4rem 4rem 4rem;
+    }
 }
 
 .instructions {
 
     width: 100%;
-    max-width: 1400px;
-    padding: 1rem;
+    max-width: 1200px;
 
     @include tablet {
         display: flex;
-        gap: 1rem;
+        gap: 2rem;
+    }
+
+    @include desktop {
+        gap: 4rem;
     }
 
     &__list {
@@ -110,10 +122,6 @@
 
     @include tablet {
         margin: 4rem 0;
-    }
-
-    @include desktop {
-        margin: 12rem 0;
     }
 
     &__title {
