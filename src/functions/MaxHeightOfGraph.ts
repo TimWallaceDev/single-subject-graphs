@@ -1,7 +1,7 @@
 
 
 
-export function MaxHeightOfGraph(columns) {
+export function MaxHeightOfGraph(columns: string[][]) {
     //get the max height for all graphs
     let maxHeight = 0
     for (const column of columns) {

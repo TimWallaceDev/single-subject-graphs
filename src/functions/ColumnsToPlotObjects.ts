@@ -10,7 +10,7 @@ interface LineSegment {
 }
 
 
-export function ColumnsToPlotObjects(columns){
+export function ColumnsToPlotObjects(columns: string[][]){
     //turn columns into objects for the Plot  
     const data = []
 

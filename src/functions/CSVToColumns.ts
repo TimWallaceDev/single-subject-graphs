@@ -18,7 +18,8 @@ export function CSVToColumns(csvData: DataPoint[], fields: string[]){
             if (!columns[j]) {
                 columns[j] = []
             }
-            columns[j].push(dataValue)
+            
+            columns[j].push(typeof dataValue === 'string'? dataValue : dataValue.toString())
         }
     }
 

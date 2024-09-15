@@ -5,7 +5,6 @@ import { ColumnsToPlotObjects } from '../../functions/ColumnsToPlotObjects';
 import { MaxHeightOfGraph } from '../../functions/MaxHeightOfGraph';
 import { CreateLines } from '../../functions/CreateLines';
 import { CalculateDomains } from '../../functions/CalculateDomains';
-import { Layout } from 'plotly.js';
 
 interface GraphProps {
     csvData: DataPoint[],
@@ -13,6 +12,16 @@ interface GraphProps {
     title: string,
     YAxisLabel: string,
     XAxisLabel: string
+}
+
+interface XAxisObject {
+    showgrid: boolean,
+    anchor: string,
+    ticklen: number,
+    tickwidth: number,
+    range: number[],
+    tickvals: number[],
+    ticktext: string[]
 }
 
 export const MultipleBaselineGraph = (props: GraphProps) => {
@@ -100,7 +109,7 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
             text: XAxisLabel,  // The text you want to display
             xref: "paper",                // Use 'paper' to refer to the full plotting area
             yref: "paper",
-            x: 0.5 ,                     // Position at the left side (x = 0)
+            x: 0.5,                     // Position at the left side (x = 0)
             y: -0.07,                       // Centered vertically (y = 0.5)
             xanchor: 'center',             // Align text to the right (so it doesn't overlap)
             yanchor: 'top',            // Center vertically
@@ -125,9 +134,27 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
     //calculate domains for each graph
     const domains = CalculateDomains(data.length / 2)
 
+    interface Layout {
+        title: string,
+        annotations: typeof annotations,   //graph annotations array
+        margin: { l: 75, r: 25, t: 100, b: 100 }, //margins
+        font: {
+            family: 'Arial, Helvetica, sans-serif',
+            size: 14,
+            color: '#000'
+        },
+        grid: { rows: number, columns: number, pattern: 'independent' }, // Define a grid for stacking
+        shapes: typeof lines,
+        showlegend: boolean,
+        height: number,
+        width: number,
+        xaxis: XAxisObject,
+        yaxis: object,
+        [key: string]: any;
+    }
 
     //generate layout
-    const layout = {
+    const layout: Layout = {
         title: title,
         annotations: annotations,   //graph annotations array
         margin: { l: 75, r: 25, t: 100, b: 100 }, //margins
@@ -140,7 +167,25 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         shapes: lines,
         showlegend: false,
         height: data.length * 150,
-        width: 700
+        width: 700,
+        xaxis: {
+            showgrid: false,
+            anchor: "",
+            ticklen: 4,
+            tickwidth: 1,
+            range: [],
+            tickvals: [],
+            ticktext: []
+        },
+        yaxis: {
+            showgrid: false,
+            anchor: "",
+            ticklen: 4,
+            tickwidth: 1,
+            range: [],
+            tickvals: [],
+            ticktext: []
+        }
     }
 
     //loop over all the data objects to create layout objects
@@ -164,13 +209,16 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
             tickwidth: 1
         }
 
-        const singleXAxis = {
+
+
+        const singleXAxis: XAxisObject = {
             showgrid: false,
             anchor: xAnchor,
             ticklen: 4,
             tickwidth: 1,
-            range: [0, csvData.length + 1]
-            // linewidth: 1
+            range: [0, csvData.length + 1],
+            tickvals: [],
+            ticktext: []
         }
 
         if (i == data.length / 2) {
@@ -196,9 +244,9 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
 
     return (
         <Plot
-        className='plot'
+            className='plot'
             data={data}
-            layout={layout as Partial<Layout>}
+            layout={layout as Partial<Plotly.Layout>}
         />
     );
 };

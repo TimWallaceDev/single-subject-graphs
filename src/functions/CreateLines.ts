@@ -1,4 +1,4 @@
-export function CreateLines(columns: any, maxHeight: number) {
+export function CreateLines(columns: string[][], maxHeight: number) {
 
     //calculate the percentage that the line should cover vertically
     let percentage = 0

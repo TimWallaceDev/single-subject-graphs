@@ -1,7 +1,7 @@
 import Plot from 'react-plotly.js';
 import { DataPoint } from '../../interface';
 import "./ReversalGraph.scss"
-import Plotly, { Annotations, Data, Shape } from 'plotly.js';
+import { Annotations, Data, Shape } from 'plotly.js';
 
 interface GraphProps {
     csvData: DataPoint[],
@@ -111,22 +111,6 @@ export const ReversalGraph = (props: GraphProps) => {
         }
         return { ticks, vals }
     }
-
-    
-
-    const handleDownloadHalf = () => {
-        // Use Plotly to get the SVG image
-        const plotElement = document.getElementsByClassName('plot')[0] as HTMLElement;
-        Plotly.toImage(plotElement, { format: 'png', width: 700, height: 450, })
-            .then((url) => {
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = title + '.png';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            });
-    };
 
     return (
         <>

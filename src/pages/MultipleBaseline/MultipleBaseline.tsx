@@ -7,36 +7,48 @@ import uploadFile from "../../assets/icons/upload_file.svg"
 import svg from "../../assets/graphsvg.svg"
 import download from "../../assets/icons/download.svg"
 import Plotly from "plotly.js";
+import { DataPoint } from "../../interface";
 
 
 export function MultipleBaseline() {
-    const [data, setData] = useState(null)
-    const [fields, setFields] = useState(null)
+    const [data, setData] = useState<DataPoint[] | null>(null)
+    const [fields, setFields] = useState<string[] | null>(null)
     const [title, setTitle] = useState<string>("Title")
     const [x, setX] = useState<string>("X Axis Label")
     const [y, setY] = useState<string>("Y Axis Label")
 
-    function handleFileSelect(event) {
+    function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault()
-        const file = event.target.files[0];
+        const fileInput = event.target;
+        const files = fileInput.files; // FileList | null
+        let file
+        if (files && files.length > 0) {
+            file = files[0];
+        }
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                const contents = e.target.result;
-                parseCSV(contents);
+                if (e.target) {
+                    const contents = e.target.result as string;
+                    if (contents !== null) {
+                        parseCSV(contents);
+                    }
+                }
             };
             reader.readAsText(file);
         }
     }
 
-    function parseCSV(contents) {
+    function parseCSV(contents: string) {
         Papa.parse(contents, {
             header: true,
             dynamicTyping: true,
             complete: function (results) {
-                const data = results.data;
+                const data: DataPoint[] = results.data as DataPoint[];
                 setData(data)
-                setFields(results.meta.fields)
+                if (results.meta.fields) {
+                    setFields(results.meta.fields)
+                }
             }
         });
     }
@@ -135,28 +147,18 @@ export function MultipleBaseline() {
     )
 
 
-    function handleTitleChange(e) {
+    function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const title = e.target.value
         setTitle(title)
     }
 
-    function handleYChange(e) {
+    function handleYChange(e: React.ChangeEvent<HTMLInputElement>) {
         const YLabel = e.target.value
         setY(YLabel)
     }
 
-    function handleXChange(e) {
+    function handleXChange(e: React.ChangeEvent<HTMLInputElement>) {
         const XLabel = e.target.value
         setX(XLabel)
     }
-
-    return (
-        <section className="graph">
-            <h1>Add Labels / Title / and Save</h1>
-            <input type="text" placeholder="title" onChange={(e) => handleTitleChange(e)} />
-            <input type="text" placeholder="Y Axis Label" onChange={(e) => handleYChange(e)} />
-            <input type="text" placeholder="X Axis Label" onChange={(e) => handleXChange(e)} />
-            <MultipleBaselineGraph csvData={data} fields={fields} title={title} XAxisLabel={x} YAxisLabel={y} />
-        </section>
-    )
 }
