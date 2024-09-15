@@ -6,7 +6,7 @@ import spreadsheet from "../../assets/Multiple Baseline Spreadsheet.png"
 import uploadFile from "../../assets/icons/upload_file.svg"
 import svg from "../../assets/graphsvg.svg"
 import download from "../../assets/icons/download.svg"
-import Plotly from "plotly.js";
+import Plotly from "plotly.js-basic-dist";
 import { DataPoint } from "../../interface";
 
 
