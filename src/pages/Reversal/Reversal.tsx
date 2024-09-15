@@ -70,7 +70,7 @@ export function Reversal() {
         <main className="product">
             <h1 className="product__title">Reversal Graph Generator</h1>
             <section className="instructions-wrapper">
-                <h2 className="product__subtitle">Data Sheet Instructions</h2>
+                <h2 className="product__subtitle product__subtitle--underline">Data Sheet Instructions</h2>
         
                 <div className="instructions">
 
@@ -108,17 +108,17 @@ export function Reversal() {
                         </li>
                     </ol>
                     <div className="instructions__spreadsheet">
-                        <h3 className="instructions__spreadsheet-label">Example Spreadsheet</h3>
+                        <figcaption className="instructions__spreadsheet-label">Example Spreadsheet</figcaption>
                         <img src={spreadsheet} alt="spreadsheet example" className="instructions__image" />
                     </div>
                 </div>
             </section>
             <section className="form">
-                <h1 className="form__title">Upload File</h1>
+                <h3 className="form__title">Upload File</h3>
                 <div className="file">
                     <label htmlFor="fileInput" className="file__label">
                         <span className="button__text">Upload Data Sheet</span>
-                        <img src={uploadFile} />
+                        <img src={uploadFile} alt="file upload icon"/>
                     </label>
                     <input type="file" id="fileInput" className="choose-file-button" accept=".csv" name="file" onChange={(e) => handleFileSelect(e)} />
                 </div>

@@ -106,18 +106,18 @@ export function MultipleBaseline() {
                         </li>
                     </ol>
                     <div className="instructions__spreadsheet">
-                        <h3 className="instructions__spreadsheet-label">Example Spreadsheet</h3>
+                        <figcaption className="instructions__spreadsheet-label">Example Spreadsheet</figcaption>
                         <img src={spreadsheet} alt="spreadsheet example" className="instructions__image" />
                     </div>
                 </div>
             </section>
 
             <section className="form">
-                <h1 className="form__title">Upload File</h1>
+                {/* <h3 className="form__title">Upload File</h3> */}
                 <div className="file">
                     <label htmlFor="fileInput" className="file__label">
                         <span className="button__text">Upload Data Sheet</span>
-                        <img src={uploadFile} />
+                        <img src={uploadFile} alt="upload file icon"/>
                     </label>
                     <input type="file" id="fileInput" className="choose-file-button" accept=".csv" name="file" onChange={(e) => handleFileSelect(e)} />
                 </div>
@@ -127,7 +127,7 @@ export function MultipleBaseline() {
             {
                 data && fields &&
                 <section className="render">
-                    <h1 className="render__heading">Add a Title / Save</h1>
+                    <h2 className="render__heading">Add a Title / Save</h2>
                     <div className="render__inputs">
 
                         <input className="render__title-input" type="text" placeholder="Graph Title" onChange={(e) => handleTitleChange(e)} />

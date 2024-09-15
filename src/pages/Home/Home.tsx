@@ -10,7 +10,7 @@ export function Home() {
 
             <section className="hero">
                 <div className="hero__left">
-                    <h2 className="hero__title">Save time while graphing</h2>
+                    <h1 className="hero__title">Save time while graphing</h1>
                     <p className="hero__copy">Spend less time creating graphs, and more time with other things. Single Subject Graphs generates graphs from your data sheets instantly. All data remains on your device, so you never have to worry about your data. Automatically formatted to meet APA guidelines. Available for Multiple Baseline Graphs, or Reverse Baseline Graphs.</p>
                 </div>
                 <div className="hero__right">

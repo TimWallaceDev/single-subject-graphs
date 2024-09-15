@@ -6,7 +6,7 @@ export function Nav() {
     return (
         <nav className="nav">
             <Link to="/">
-                <h1 className="nav__title">Single Subject Graphs</h1>
+                <span className="nav__title">Single Subject Graphs</span>
             </Link>
 
             <ul className="nav__items">

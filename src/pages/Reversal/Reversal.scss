@@ -36,6 +36,9 @@
 
     &__subtitle {
         text-align: center;
+    }
+    
+    &__subtitle--underline {
         text-decoration: underline;
     }
 }
@@ -75,11 +78,10 @@
     &__spreadsheet-label {
         font-weight: normal;
         font-size: 1rem;
+        margin: 1rem;
     }
 
     &__spreadsheet {
-
-
 
         @include tablet {
             flex: 1;
