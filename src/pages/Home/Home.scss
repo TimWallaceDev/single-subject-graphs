@@ -1,4 +1,5 @@
 @use "../../styles/mixins.scss" as *;
+@use "../../styles/variables.scss" as *;
 
 .home {
     display: flex;
@@ -66,16 +67,13 @@
     }
 }
 
-.product-card >a {
+.product-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 3rem 0;
     gap: 2rem;
     margin: 0 1rem;
-}
-
-.product-card {
     width: 100%;
 
     &--gray {
@@ -89,5 +87,9 @@
     padding: 16px 2rem;
     border-radius: 4px;
     border: none;
+
+    &:hover {
+        background-color: $blue-hover;
+    }
 
 }

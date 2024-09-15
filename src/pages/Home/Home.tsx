@@ -18,16 +18,16 @@ export function Home() {
                 </div>
             </section>
             <section className="product-card product-card--gray">
-                <Link to="/reversal">
                     <h2>Reversal Graph / ABAB Graph</h2>
                     <img src={reversalBaseline} alt="image of a reversal graph" className="home__img" />
+                <Link to="/reversal">
                     <button className="link-button">Generate Now</button>
                 </Link>
             </section>
             <section className="product-card">
-                <Link to="/multiple-baseline">
                     <h2 className="multiple__title">Multiple Baseline Graph</h2>
                     <img src={multipleBaseline} alt="image of a multiple baseline graph" className="home__img" />
+                <Link to="/multiple-baseline">
                     <button className="link-button">Generate Now</button>
                 </Link>
             </section>
