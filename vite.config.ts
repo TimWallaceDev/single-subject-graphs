@@ -7,12 +7,12 @@ export default defineConfig({
   plugins: [react(), nodePolyfills()],
   build: {
     rollupOptions: {
-      external: ['buffer/']
+      // external: ['buffer/']
     }
   },
   resolve: {
     alias: {
-      buffer: 'buffer/'
+      // buffer: 'buffer/'
     }
   }
 })
