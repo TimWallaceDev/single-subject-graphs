@@ -1,0 +1,14 @@
+@use "../../styles/variables.scss" as *;
+
+.footer {
+    background-color: rgb(196, 195, 195);
+    padding: 1rem 0;
+
+    &__title {
+        text-align: center;
+        margin: 0;
+        color: $blue;
+        color: black;
+        font-weight: 400;
+    }
+}

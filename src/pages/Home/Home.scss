@@ -1,9 +1,10 @@
+@use "../../styles/mixins.scss" as *;
+
 .home {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 32px 0;
-    gap: 128px;
+    margin-bottom: 2rem;
 
     &__img {
         width: 100%;
@@ -13,25 +14,79 @@
 
 .hero {
     display: flex;
-    margin: 32px 128px;
-    // min-height: 100vh;
+    flex-direction: column;
     align-items: center;
+    max-width: 1200px;
+    gap: 1rem;
+    margin: 1rem 1rem;
+    margin-bottom: 3rem;
+
+    @include tablet {
+        flex-direction: row;
+        margin: 4rem;
+        gap: 4rem;
+    }
 
     &__left {
-        flex: 1;
-        padding: 32px;
-        background-color: gray;
         color: white;
+
+        @include tablet {
+            flex: 3;
+        }
+    }
+
+    &__title {
+        text-align: center;
+
+        @include tablet {
+            text-align: left;
+        }
+    }
+
+    &__copy {
+        text-align: center;
+
+        @include tablet {
+            text-align: left;
+        }
     }
 
     &__right {
-        flex: 1;
         gap: 64px;
-        padding: 32px;
+
+        @include tablet {
+            flex: 2;
+        }
     }
 
     &__img {
         width: 100%;
-        max-width: 500px;
+        border: 1px solid black;
     }
+}
+
+.product-card >a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0;
+    gap: 2rem;
+    margin: 0 1rem;
+}
+
+.product-card {
+    width: 100%;
+
+    &--gray {
+        background: lightgray;
+    }
+}
+
+.link-button {
+    background: #535bf2;
+    color: white;
+    padding: 16px 2rem;
+    border-radius: 4px;
+    border: none;
+
 }

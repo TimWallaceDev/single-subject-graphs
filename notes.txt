@@ -19,3 +19,13 @@ In google sheets go to file > Download > Comma Separated Values (.csv)
 4. View your graph
 
 5. Add a title / save your graph
+
+
+
+HERO COPY
+Spend less time creating graphs, and more time with other things. Single Subject Graphs generates graphs from your data sheets instantly. All data remains on your device, so you never have to worry about your data. 
+
+
+
+let user choose the size
+half page, full page

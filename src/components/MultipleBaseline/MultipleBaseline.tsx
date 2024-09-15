@@ -9,13 +9,14 @@ import { Layout } from 'plotly.js';
 
 interface GraphProps {
     csvData: DataPoint[],
-    fields: string[]
+    fields: string[],
+    title: string,
+    YAxisLabel: string,
+    XAxisLabel: string
 }
 
 export const MultipleBaselineGraph = (props: GraphProps) => {
-    const { csvData, fields } = props;
-
-    console.log({ fields })
+    const { csvData, fields, title, YAxisLabel, XAxisLabel } = props;
 
     //separate data into columns
     const columns = CSVToColumns(csvData, fields)
@@ -29,26 +30,26 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
     //add lines
     const lines = CreateLines(columns, maxHeight)
 
-    function generateTicks(length: number, blank: boolean) {
+    function generateTicks(csvData: DataPoint[], blank: boolean) {
+        const sessionLabel = fields[0]
         const text = []
         const vals = []
-        for (let i = 1; i < length + 1; i++) {
+        for (let i = 0; i < csvData.length + 1; i++) {
             if (i === 0) {
                 text.push("")
             }
             else if (blank) {
-                console.log("blank")
                 text.push("")
             }
             else {
-                console.log("value")
-                text.push(i)
+                const currentObject = csvData[i - 1]
+                const tick = currentObject[sessionLabel].toString()
+                text.push(tick)
             }
 
             vals.push(i)
 
         }
-        console.log({text})
         return { text: [...text], vals: [...vals] }
     }
 
@@ -77,10 +78,10 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         },
     )
 
-    //add axis titles
+    //add Y axis title
     annotations.push(
         {
-            text: "Vertical Annotation",  // The text you want to display
+            text: YAxisLabel,  // The text you want to display
             xref: "paper",                // Use 'paper' to refer to the full plotting area
             yref: "paper",
             x: -0.07,                         // Position at the left side (x = 0)
@@ -89,7 +90,22 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
             yanchor: 'middle',            // Center vertically
             showarrow: false,             // No arrow pointing to the text
             textangle: -90,          // Rotate text 90 degrees counterclockwise
-            font: { size: 12 }
+            font: { size: 14 }
+        }
+    )
+
+    //add X axis title
+    annotations.push(
+        {
+            text: XAxisLabel,  // The text you want to display
+            xref: "paper",                // Use 'paper' to refer to the full plotting area
+            yref: "paper",
+            x: 0.5 ,                     // Position at the left side (x = 0)
+            y: -0.07,                       // Centered vertically (y = 0.5)
+            xanchor: 'center',             // Align text to the right (so it doesn't overlap)
+            yanchor: 'top',            // Center vertically
+            showarrow: false,             // No arrow pointing to the text
+            font: { size: 14 }
         }
     )
 
@@ -106,26 +122,25 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         annotations.push({ ...annotation })
     }
 
-    //add title
-
     //calculate domains for each graph
     const domains = CalculateDomains(data.length / 2)
 
 
     //generate layout
     const layout = {
-        title: "Title",
+        title: title,
         annotations: annotations,   //graph annotations array
-        margin: { l: 75, r: 75, t: 100, b: 100 }, //margins
+        margin: { l: 75, r: 25, t: 100, b: 100 }, //margins
         font: {
-            family: 'Times New Roman, serif',
-            size: 12,
+            family: 'Arial, Helvetica, sans-serif',
+            size: 14,
             color: '#000'
         },
         grid: { rows: data.length / 2, columns: 1, pattern: 'independent' }, // Define a grid for stacking
         shapes: lines,
         showlegend: false,
-        height: data.length * 150
+        height: data.length * 150,
+        width: 700
     }
 
     //loop over all the data objects to create layout objects
@@ -159,14 +174,12 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         }
 
         if (i == data.length / 2) {
-            singleXAxis["tickvals"] = generateTicks(csvData.length, false).vals
-            singleXAxis["ticktext"] = generateTicks(csvData.length, false).text
-            console.log("adding custom ticks")
+            singleXAxis["tickvals"] = generateTicks(csvData, false).vals
+            singleXAxis["ticktext"] = generateTicks(csvData, false).text
         }
         else {
-            singleXAxis["tickvals"] = generateTicks(csvData.length, true).vals
-            singleXAxis["ticktext"] = generateTicks(csvData.length, true).text
-            console.log("adding blank ticks")
+            singleXAxis["tickvals"] = generateTicks(csvData, true).vals
+            singleXAxis["ticktext"] = generateTicks(csvData, true).text
         }
 
 
@@ -174,7 +187,6 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
             yaxis += i
             xaxis += i
         }
-        console.log(yaxis, xaxis)
 
         //add the single axis to the layout object
         layout[xaxis] = { ...singleXAxis }
@@ -182,10 +194,9 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
 
     }
 
-    console.log({ layout })
-
     return (
         <Plot
+        className='plot'
             data={data}
             layout={layout as Partial<Layout>}
         />

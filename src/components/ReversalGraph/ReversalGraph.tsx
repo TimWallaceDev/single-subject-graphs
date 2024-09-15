@@ -1,17 +1,17 @@
 import Plot from 'react-plotly.js';
 import { DataPoint } from '../../interface';
 import "./ReversalGraph.scss"
-import { Annotations, Data, Shape } from 'plotly.js';
+import Plotly, { Annotations, Data, Shape } from 'plotly.js';
 
 interface GraphProps {
     csvData: DataPoint[],
-    fields: string[]
+    fields: string[],
+    title: string
 }
 
 export const ReversalGraph = (props: GraphProps) => {
-    const { csvData, fields } = props;
+    const { csvData, fields, title } = props;
     const conditionName = fields[2];
-    // console.log({csvData})
     const separatedData = [];
     const conditions = [csvData[0].condition];
     let tmpCondition: string = csvData[0].condition;
@@ -25,7 +25,6 @@ export const ReversalGraph = (props: GraphProps) => {
         if (typeof tmpDataPoint[conditionName] === 'number' && tmpDataPoint[conditionName] > maxHeight) {
             maxHeight = tmpDataPoint[conditionName];
         }
-        // console.log(tmpDataPoint.condition)
         if (tmpDataPoint.condition !== tmpCondition) {
             separatedData.push(tmpData);
             tmpData = [tmpDataPoint];
@@ -72,6 +71,8 @@ export const ReversalGraph = (props: GraphProps) => {
             });
         }
 
+
+        //add condition labels
         const centerX = (totalItem + totalItem + tmpArray.length - 1) / 2;
 
         annotations.push({
@@ -79,10 +80,9 @@ export const ReversalGraph = (props: GraphProps) => {
             y: maxHeight + 1,
             xref: 'x',
             yref: 'y',
-            text: separatedData[i][0].condition,  // The title text
+            text: separatedData[i][0].condition,  // The condition text
             showarrow: false,
             font: {
-                size: 12,
                 color: 'black'
             },
             xanchor: 'center',
@@ -102,9 +102,7 @@ export const ReversalGraph = (props: GraphProps) => {
 
             //create label
             const currentObject = csvData[i]
-            console.log({ currentObject })
             const tick = currentObject[sessionLabel].toString()
-            console.log(tick)
             ticks.push(tick)
 
             //create value
@@ -114,47 +112,64 @@ export const ReversalGraph = (props: GraphProps) => {
         return { ticks, vals }
     }
 
-    console.log({ objects })
+    
 
-    console.log()
+    const handleDownloadHalf = () => {
+        // Use Plotly to get the SVG image
+        const plotElement = document.getElementsByClassName('plot')[0] as HTMLElement;
+        Plotly.toImage(plotElement, { format: 'png', width: 700, height: 450, })
+            .then((url) => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = title + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+    };
 
     return (
-        <Plot
-            data={objects as Data[]}
-            layout={{
-                title: "title",
-                font: {
-                    family: 'Times new Roman, serif', // Font family for the title
-                    size: 12, // Font size for the title
-                    color: '#000' // Font color for the title
-                },
-                yaxis: {
-                    title: conditionName,
-                    showgrid: false,
-                    range: [0, maxHeight + 1],
-                    ticklen: 4,
-                    tickwidth: 1
-                },
-                xaxis: {
-                    title: 'Sessions',
-                    showgrid: false,
-                    tickvals: generateTicks(csvData).vals, // Custom tick values
-                    ticktext: generateTicks(csvData).ticks, // Custom tick text
-                    range: [0, csvData.length + 1],
-                    ticklen: 4,
-                    tickwidth: 1
-                },
-                shapes: lines as Shape[], // Add lines to the layout
-                showlegend: false, // Optionally show legend
-                annotations: annotations as Annotations[],
-                margin: {
-                    l: 75,  // Left margin
-                    r: 75,  // Right margin
-                    t: 100,  // Top margin
-                    b: 100   // Bottom margin
-                }
-            }
-            }
-        />
+        <>
+            <Plot
+                className="plot"
+                data={objects as Data[]}
+                layout={{
+                    title: title,
+                    height: 450,
+                    width: 700,
+                    font: {
+                        family: 'Arial, Helvetica, sans-serif', // Font family for the title
+                        size: 14, // Font size for the title
+                        color: '#000' // Font color for the title
+                    },
+                    yaxis: {
+                        title: conditionName,
+                        showgrid: false,
+                        range: [0, maxHeight + 1],
+                        ticklen: 4,
+                        tickwidth: 1
+                    },
+                    xaxis: {
+                        title: 'Sessions',
+                        showgrid: false,
+                        tickvals: generateTicks(csvData).vals, // Custom tick values
+                        ticktext: generateTicks(csvData).ticks, // Custom tick text
+                        range: [0, csvData.length + 1],
+                        ticklen: 4,
+                        tickwidth: 1
+                    },
+                    shapes: lines as Shape[], // Add lines to the layout
+                    showlegend: false, // Optionally show legend
+                    annotations: annotations as Annotations[],
+                    margin: {
+                        l: 75,  // Left margin
+                        r: 25,  // Right margin
+                        t: 100,  // Top margin
+                        b: 100   // Bottom margin
+                    }
+                }}
+                config={{responsive: true}}
+            />
+            </>
     );
 };

@@ -1,7 +1,174 @@
+@use "../../styles/mixins.scss" as *;
+@use "../../styles/variables.scss" as *;
 
 
-.reversal {
+.product {
+
+    &__title {
+        font-weight: 600;
+        color: #222
+    }
+
+    &__subtitle {
+        font-weight: normal;
+    }
+}
+.product {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 1rem;
+    min-height: 100vh;
+    justify-content: center;
+
+    @include tablet {
+        padding: 0 2rem;
+    }
+
+    @include desktop {
+        padding: 0 4rem;
+    }
+
+    &__subtitle {
+        text-align: center;
+        text-decoration: underline;
+    }
+}
+.instructions-wrapper {
+    background-color: $light-gray;
+}
+.instructions {
+
+    width: 100%;
+    max-width: 1400px;
+    padding: 1rem;
+
+    @include tablet {
+        display: flex;
+        gap: 1rem;
+    }
+
+    &__list {
+
+        @include tablet {
+            flex: 1;
+            margin-top: 4rem;
+        }
+
+        @include desktop {
+            flex: 3
+        }
+    }
+
+    &__item {
+        margin-bottom: 1rem;
+    }
+
+    &__spreadsheet-label {
+        font-weight: normal;
+        font-size: 1rem;
+    }
+
+    &__spreadsheet {
+
+
+        @include tablet {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @include desktop {
+            flex: 2;
+        }
+    }
+
+    &__image {
+        @include tablet {
+            max-width: 450px;
+            width: 100%;
+        }
+    }
+}
+
+.form {
+
+    @include tablet {
+        margin: 4rem 0;
+    }
+
+    @include desktop {
+        margin: 12rem 0;
+    }
+
+    &__title {
+        font-weight: 600;
+    }
+}
+
+.file {
+    background: $blue;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+
+    &:hover {
+        background: $blue-hover;
+    }
+    
+    &__label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+}
+
+#fileInput {
+    display: none;
+}
+
+.render {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+
+    &__heading {
+        margin: 0;
+    }
+
+    &__inputs {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    &__title-input{
+        flex: 1;
+    }
+
+    &__placeholder-image {
+        width: 500px;
+        margin-bottom: 4rem;
+        background-color: rgb(220, 217, 217);
+    }
+}
+
+.download-svg-button {
+    @include button--primary;
+}
+
+.button__text {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem
+}
+
+.button__icon {
+    width: 1.5rem;
 }

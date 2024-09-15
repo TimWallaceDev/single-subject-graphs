@@ -1,5 +1,5 @@
-import reversalBaseline from "../../assets/reversal.png"
-import multipleBaseline from "../../assets/multiple-baseline.png"
+import reversalBaseline from "../../assets/Reversal Baseline.png"
+import multipleBaseline from "../../assets/Multiple Baseline.png"
 import { Link } from "react-router-dom"
 import "./Home.scss"
 
@@ -10,23 +10,27 @@ export function Home() {
 
             <section className="hero">
                 <div className="hero__left">
-                    <h2>Unlock the Power of Advanced Graphing Techniques</h2>
-                    <p>Unlock the full potential of your data with our cutting-edge reversal and multiple baseline graphs. Our platform offers intuitive and interactive graphing tools that turn complex datasets into clear, actionable insights.
-
-                        Visualize your data with precision and clarity, whether you’re comparing multiple trends over time or analyzing intricate patterns with reversal baselines. Our graphs are designed to simplify data analysis and enhance your presentations, making it easy to uncover key insights and communicate findings effectively.</p>
+                    <h2 className="hero__title">Save time while graphing</h2>
+                    <p className="hero__copy">Spend less time creating graphs, and more time with other things. Single Subject Graphs generates graphs from your data sheets instantly. All data remains on your device, so you never have to worry about your data. Automatically formatted to meet APA guidelines. Available for Multiple Baseline Graphs, or Reverse Baseline Graphs.</p>
                 </div>
                 <div className="hero__right">
-                    <img src={reversalBaseline} alt="reversal graph" className="hero__img"/>
+                    <img src={reversalBaseline} alt="reversal graph" className="hero__img" />
                 </div>
             </section>
-            <Link to="/reversal">
-                <h2>Reversal Graph / ABAB Graph</h2>
-                <img src={reversalBaseline} alt="image of a reversal graph" className="home__img" />
-            </Link>
-            <Link to="/multiple-baseline">
-                <h2>Multiple Baseline Graph</h2>
-                <img src={multipleBaseline} alt="image of a multiple baseline graph" className="home__img" />
-            </Link>
+            <section className="product-card product-card--gray">
+                <Link to="/reversal">
+                    <h2>Reversal Graph / ABAB Graph</h2>
+                    <img src={reversalBaseline} alt="image of a reversal graph" className="home__img" />
+                    <button className="link-button">Generate Now</button>
+                </Link>
+            </section>
+            <section className="product-card">
+                <Link to="/multiple-baseline">
+                    <h2 className="multiple__title">Multiple Baseline Graph</h2>
+                    <img src={multipleBaseline} alt="image of a multiple baseline graph" className="home__img" />
+                    <button className="link-button">Generate Now</button>
+                </Link>
+            </section>
         </main>
     )
 }

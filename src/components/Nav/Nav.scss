@@ -1,23 +1,45 @@
-
+@use "../../styles/mixins.scss" as *;
+@use "../../styles/variables.scss" as *;
 
 .nav {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin: 0 64px;
+    justify-content: center;
+    padding: 8px 0;
+    background: lightgray;
+
+    @include tablet {
+        justify-content: space-between;
+        padding: 0 2rem;
+    }
 
     &__title {
-        color: white;
+        font-size: 1.2rem;
         margin: 0;
+        color: $blue;
+        font-weight: 600;
+
+        &:hover {
+            color: $blue-hover;
+        }
     }
 
     &__items {
-        display: flex;
+        display: none;
         list-style-type: none;
-        gap: 32px;
+        gap: 1rem;
+
+        @include tablet {
+            display: flex;
+            gap: 2rem;
+        }
     }
 
     &__link {
-        color: white;
+
+        font-weight: 400;
+        &:hover {
+            color: #333;
+        }
     }
 }

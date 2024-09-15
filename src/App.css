@@ -1,7 +1,3 @@
-body {
-    background: linear-gradient(to top, purple, rgb(80, 80, 240));
-}
-
-h2 {
-    color: white;
+* {
+    color: black;
 }
