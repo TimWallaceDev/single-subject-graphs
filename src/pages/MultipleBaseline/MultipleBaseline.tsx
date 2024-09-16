@@ -67,6 +67,8 @@ export function MultipleBaseline() {
             });
     };
 
+
+
     return (
         <main className="product">
             <h1 className="product__title">Multiple Baseline Graph Generator</h1>
@@ -113,11 +115,11 @@ export function MultipleBaseline() {
             </section>
 
             <section className="form">
-                {/* <h3 className="form__title">Upload File</h3> */}
+                <h3 className="form__title">Upload Data Sheet</h3>
                 <div className="file">
                     <label htmlFor="fileInput" className="file__label">
                         <span className="button__text">Upload Data Sheet</span>
-                        <img src={uploadFile} alt="upload file icon"/>
+                        <img src={uploadFile} alt="upload file icon" />
                     </label>
                     <input type="file" id="fileInput" className="choose-file-button" accept=".csv" name="file" onChange={(e) => handleFileSelect(e)} />
                 </div>

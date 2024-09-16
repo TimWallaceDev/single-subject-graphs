@@ -112,47 +112,64 @@ export const ReversalGraph = (props: GraphProps) => {
         return { ticks, vals }
     }
 
+    const layout ={
+        title: title,
+        height: 450,
+        width: 700,
+        font: {
+            family: 'Arial, Helvetica, sans-serif', // Font family for the title
+            size: 14, // Font size for the title
+            color: '#000' // Font color for the title
+        },
+        yaxis: {
+            title: conditionName,
+            showgrid: false,
+            range: [0, maxHeight + 1],
+            ticklen: 4,
+            tickwidth: 1
+        },
+        xaxis: {
+            title: 'Sessions',
+            showgrid: false,
+            tickvals: generateTicks(csvData).vals, // Custom tick values
+            ticktext: generateTicks(csvData).ticks, // Custom tick text
+            range: [0, csvData.length + 1],
+            ticklen: 4,
+            tickwidth: 1
+        },
+        shapes: lines as Shape[], // Add lines to the layout
+        showlegend: false, // Optionally show legend
+        annotations: annotations as Annotations[],
+        margin: {
+            l: 75,  // Left margin
+            r: 25,  // Right margin
+            t: 100,  // Top margin
+            b: 100   // Bottom margin
+        }
+    }
+    let ratio = 1
+
+    function checkMobile(){
+        const currentWidth = window.innerWidth
+        console.log({currentWidth})
+        if (currentWidth < 700){
+            console.log("need mobile")
+            const deviceWidth = window.innerWidth
+            ratio = (deviceWidth - 32) / 700
+        }
+    }
+
+    checkMobile()
+    console.log(ratio)
+
     return (
         <>
             <Plot
                 className="plot"
                 data={objects as Data[]}
-                layout={{
-                    title: title,
-                    height: 450,
-                    width: 700,
-                    font: {
-                        family: 'Arial, Helvetica, sans-serif', // Font family for the title
-                        size: 14, // Font size for the title
-                        color: '#000' // Font color for the title
-                    },
-                    yaxis: {
-                        title: conditionName,
-                        showgrid: false,
-                        range: [0, maxHeight + 1],
-                        ticklen: 4,
-                        tickwidth: 1
-                    },
-                    xaxis: {
-                        title: 'Sessions',
-                        showgrid: false,
-                        tickvals: generateTicks(csvData).vals, // Custom tick values
-                        ticktext: generateTicks(csvData).ticks, // Custom tick text
-                        range: [0, csvData.length + 1],
-                        ticklen: 4,
-                        tickwidth: 1
-                    },
-                    shapes: lines as Shape[], // Add lines to the layout
-                    showlegend: false, // Optionally show legend
-                    annotations: annotations as Annotations[],
-                    margin: {
-                        l: 75,  // Left margin
-                        r: 25,  // Right margin
-                        t: 100,  // Top margin
-                        b: 100   // Bottom margin
-                    }
-                }}
+                layout={layout}
                 config={{responsive: true}}
+                style={{"scale": ratio.toString()}}
             />
             </>
     );

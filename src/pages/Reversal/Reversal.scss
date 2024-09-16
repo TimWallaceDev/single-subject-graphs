@@ -37,7 +37,7 @@
     &__subtitle {
         text-align: center;
     }
-    
+
     &__subtitle--underline {
         text-decoration: underline;
     }
@@ -95,6 +95,8 @@
 
     &__spreadsheet {
 
+        max-width: 100%;
+
         @include tablet {
             flex: 1;
             display: flex;
@@ -108,8 +110,9 @@
     }
 
     &__image {
-        
+
         border-radius: 4px;
+        max-width: 100%;
 
         @include tablet {
             max-width: 450px;
@@ -119,6 +122,8 @@
 }
 
 .form {
+
+    margin: 4rem 0;
 
     @include tablet {
         margin: 4rem 0;
@@ -157,8 +162,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3rem;
     margin-bottom: 4rem;
+    margin: 0 1rem 4rem 1rem;
+    width: 100%;
+    gap: 1rem;
+
+    @include tablet {
+        gap: 3rem;
+    }
 
     &__heading {
         margin: 0;
@@ -168,6 +179,8 @@
         display: flex;
         gap: 1rem;
         width: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     &__title-input {
@@ -175,9 +188,13 @@
     }
 
     &__placeholder-image {
-        width: 500px;
+        width: 100%;
         margin-bottom: 4rem;
         background-color: rgb(220, 217, 217);
+
+        @include tablet {
+            width: 500px;
+        }
     }
 }
 

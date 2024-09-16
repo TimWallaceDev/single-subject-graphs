@@ -239,14 +239,29 @@ export const MultipleBaselineGraph = (props: GraphProps) => {
         //add the single axis to the layout object
         layout[xaxis] = { ...singleXAxis }
         layout[yaxis] = { ...singleYAxis }
-
     }
+
+    let ratio = 1
+
+    function checkMobile(){
+        const currentWidth = window.innerWidth
+        console.log({currentWidth})
+        if (currentWidth < 700){
+            console.log("need mobile")
+            const deviceWidth = window.innerWidth
+            ratio = (deviceWidth - 32) / 700
+        }
+    }
+
+    checkMobile()
+    console.log(ratio)
 
     return (
         <Plot
             className='plot'
             data={data}
             layout={layout as Partial<Plotly.Layout>}
+            style={{"scale": ratio.toString()}}
         />
     );
 };
