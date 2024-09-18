@@ -133,8 +133,8 @@ export function MultipleBaseline() {
                     <div className="render__inputs">
 
                         <input className="render__title-input" type="text" placeholder="Graph Title" onChange={(e) => handleTitleChange(e)} />
-                        <input type="text" placeholder="Y Axis Label" onChange={(e) => handleYChange(e)} />
-                        <input type="text" placeholder="X Axis Label" onChange={(e) => handleXChange(e)} />
+                        <input className="render__title-input" type="text" placeholder="Y Axis Label" onChange={(e) => handleYChange(e)} />
+                        <input className="render__title-input" type="text" placeholder="X Axis Label" onChange={(e) => handleXChange(e)} />
                         <button onClick={handleDownload} className="download-svg-button">
                             <span className="button__text">
                                 Download PNG

@@ -1,7 +1,7 @@
 @use "../../styles/variables.scss" as *;
 
 .footer {
-    background-color: rgb(196, 195, 195);
+    background-color: $light-gray;
     padding: 1rem 0;
 
     &__title {
