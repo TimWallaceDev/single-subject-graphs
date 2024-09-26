@@ -8,6 +8,7 @@ import download from "../../assets/icons/download.svg"
 import uploadFile from "../../assets/icons/upload_file.svg"
 import { DataPoint } from "../../interface";
 import Plotly from "plotly.js-basic-dist";
+import { Reference } from "../../components/Reference/Reference";
 
 
 export function Reversal() {
@@ -140,6 +141,8 @@ export function Reversal() {
                         </button>
                     </div>
                     <ReversalGraph csvData={data} fields={fields} title={title} />
+
+                    <Reference title="Reversal Baseline Generator"/>
                 </section>
             }
             {(!data || !fields) &&
