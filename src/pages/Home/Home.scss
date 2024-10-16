@@ -38,11 +38,16 @@
     }
 
     &__title {
+        font-size: 40px;
         text-align: center;
 
         @include tablet {
             text-align: left;
         }
+    }
+
+    &__subtitle {
+        font-weight: 400;
     }
 
     &__copy {

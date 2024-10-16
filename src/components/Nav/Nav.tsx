@@ -29,6 +29,11 @@ export function Nav() {
 
                 <ul className="nav__items">
                     <li className="nav__item">
+                        <Link to="/">
+                            <span className="nav__link">Home</span>
+                        </Link>
+                    </li>
+                    <li className="nav__item">
                         <Link to="/reversal">
                             <span className="nav__link">Reversal Graph Generator</span>
                         </Link>
@@ -42,7 +47,7 @@ export function Nav() {
                 </ul>
 
                 <span className="hamburger" onClick={toggleMobileMenu}>
-                    <img src={hamburger} alt="hamburger menu icon" className={ mobileOpen ? "hamburger-icon hamburger-icon--open" : "hamburger-icon"}></img>
+                    <img src={hamburger} alt="hamburger menu icon" className={mobileOpen ? "hamburger-icon hamburger-icon--open" : "hamburger-icon"}></img>
                 </span>
 
             </div>

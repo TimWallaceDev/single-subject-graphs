@@ -37,13 +37,24 @@
         }
     }
 
-    &__link {
-
-        font-weight: 400;
+    &__item {
+        background: #eee;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition-duration: 500ms;
 
         &:hover {
-            color: #333;
+            background: gray;
+
+            .nav__link {
+                color: white
+            }
         }
+    }
+    
+    &__link {
+        font-weight: 400;
+        transition-duration: 500ms;
     }
 }
 
